@@ -9,7 +9,7 @@ import Animated, {
   interpolate,
   Easing,
 } from 'react-native-reanimated';
-import { Loader2, RefreshCw, Download, Upload } from 'lucide-react-native';
+import { Loader as Loader2, RefreshCw, Download, Upload } from 'lucide-react-native';
 
 const LoadingSpinner = () => {
   const rotation = useSharedValue(0);
