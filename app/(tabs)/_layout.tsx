@@ -1,5 +1,5 @@
 import { Tabs } from 'expo-router';
-import { Chrome as Home, User, Settings, Activity } from 'lucide-react-native';
+import { Footprints as Home, Trophy, Users, Settings } from 'lucide-react-native';
 
 export default function TabLayout() {
   return (
@@ -32,20 +32,20 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="activity"
+        name="challenges"
         options={{
-          title: 'Activity',
+          title: 'Challenges',
           tabBarIcon: ({ size, color }) => (
-            <Activity size={size} color={color} strokeWidth={2} />
+            <Trophy size={size} color={color} strokeWidth={2} />
           ),
         }}
       />
       <Tabs.Screen
-        name="profile"
+        name="community"
         options={{
-          title: 'Profile',
+          title: 'Community',
           tabBarIcon: ({ size, color }) => (
-            <User size={size} color={color} strokeWidth={2} />
+            <Users size={size} color={color} strokeWidth={2} />
           ),
         }}
       />
