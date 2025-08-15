@@ -9,7 +9,11 @@ import {
   Play, 
   BookOpen,
   Award,
-  ChevronRight
+  ChevronRight,
+  Trophy,
+  Users,
+  MapPin,
+  Clock
 } from 'lucide-react-native';
 import Animated, { 
   useSharedValue, 
@@ -17,172 +21,30 @@ import Animated, {
   withSpring,
   withTiming 
 } from 'react-native-reanimated';
-import LoadingDemo from '@/components/LoadingDemo';
+import StepTracker from '@/components/StepTracker';
 import FloatingActionButton from '@/components/FloatingActionButton';
 import NotificationBanner from '@/components/NotificationBanner';
 
-interface QuickAction {
+interface Challenge {
   id: string;
   title: string;
-  subtitle: string;
-  icon: React.ReactNode;
-  color: string;
-  onPress: () => void;
-}
-
-interface ProgressCard {
-  id: string;
-  title: string;
-  value: string;
-  subtitle: string;
-  icon: React.ReactNode;
-  color: string;
+  description: string;
+  participants: number;
+  daysLeft: number;
   progress: number;
+  icon: React.ReactNode;
+  color: string;
 }
 
-const quickActions: QuickAction[] = [
-  {
-    id: '1',
-    title: 'Start Learning',
-    subtitle: 'Begin a new session',
-    icon: <Play size={24} color="#ffffff" />,
-    color: '#6366f1',
-    onPress: () => console.log('Start learning pressed')
-  },
-  {
-    id: '2',
-    title: 'Set Goal',
-    subtitle: 'Create a new target',
-    icon: <Target size={24} color="#ffffff" />,
-    color: '#10b981',
-    onPress: () => console.log('Set goal pressed')
-  },
-  {
-    id: '3',
-    title: 'View Progress',
-    subtitle: 'Check your stats',
-    icon: <TrendingUp size={24} color="#ffffff" />,
-    color: '#f59e0b',
-    onPress: () => console.log('View progress pressed')
-  }
-];
+interface LeaderboardEntry {
+  id: string;
+  name: string;
+  steps: number;
+  rank: number;
+  avatar: string;
+}
 
-const progressCards: ProgressCard[] = [
-  {
-    id: '1',
-    title: 'Daily Goal',
-    value: '75%',
-    subtitle: '3 of 4 tasks completed',
-    icon: <Target size={20} color="#6366f1" />,
-    color: '#6366f1',
-    progress: 75
-  },
-  {
-    id: '2',
-    title: 'Weekly Streak',
-    value: '5 days',
-    subtitle: 'Keep it up!',
-    icon: <Calendar size={20} color="#10b981" />,
-    color: '#10b981',
-    progress: 71
-  },
-  {
-    id: '3',
-    title: 'Points Earned',
-    value: '1,247',
-    subtitle: '+45 this week',
-    icon: <Star size={20} color="#f59e0b" />,
-    color: '#f59e0b',
-    progress: 62
-  }
-];
-
-const QuickActionCard = ({ action }: { action: QuickAction }) => {
-  const scale = useSharedValue(1);
-
-  const animatedStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: scale.value }],
-  }));
-
-  const handlePressIn = () => {
-    scale.value = withSpring(0.95);
-  };
-
-  const handlePressOut = () => {
-    scale.value = withSpring(1);
-  };
-
-  return (
-    <Animated.View style={[styles.quickActionCard, animatedStyle]}>
-      <TouchableOpacity
-        style={[styles.quickActionContent, { backgroundColor: action.color }]}
-        onPress={action.onPress}
-        onPressIn={handlePressIn}
-        onPressOut={handlePressOut}
-        activeOpacity={0.9}
-      >
-        <View style={styles.quickActionIcon}>
-          {action.icon}
-        </View>
-        <Text style={styles.quickActionTitle}>{action.title}</Text>
-        <Text style={styles.quickActionSubtitle}>{action.subtitle}</Text>
-      </TouchableOpacity>
-    </Animated.View>
-  );
-};
-
-const ProgressCardComponent = ({ card }: { card: ProgressCard }) => {
-  const scale = useSharedValue(1);
-
-  const animatedStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: scale.value }],
-  }));
-
-  const handlePressIn = () => {
-    scale.value = withSpring(0.98);
-  };
-
-  const handlePressOut = () => {
-    scale.value = withSpring(1);
-  };
-
-  return (
-    <Animated.View style={[styles.progressCard, animatedStyle]}>
-      <TouchableOpacity
-        style={styles.progressContent}
-        onPressIn={handlePressIn}
-        onPressOut={handlePressOut}
-        activeOpacity={0.8}
-      >
-        <View style={styles.progressHeader}>
-          <View style={[styles.progressIcon, { backgroundColor: `${card.color}15` }]}>
-            {card.icon}
-          </View>
-          <Text style={styles.progressValue}>{card.value}</Text>
-        </View>
-        
-        <Text style={styles.progressTitle}>{card.title}</Text>
-        <Text style={styles.progressSubtitle}>{card.subtitle}</Text>
-        
-        <View style={styles.progressBar}>
-          <View style={styles.progressTrack}>
-            <View 
-              style={[
-                styles.progressFill, 
-                { 
-                  width: `${card.progress}%`, 
-                  backgroundColor: card.color 
-                }
-              ]} 
-            />
-          </View>
-        </View>
-      </TouchableOpacity>
-    </Animated.View>
-  );
-};
-
-export default function HomeScreen() {
+const WalkingChallengeApp: React.FC = () => {
   const [user] = useState({
     name: 'Alex',
     greeting: 'Good morning'
@@ -194,6 +56,47 @@ export default function HomeScreen() {
     title: '',
     message: ''
   });
+
+  const challenges: Challenge[] = [
+    {
+      id: '1',
+      title: '10K Daily Challenge',
+      description: 'Walk 10,000 steps every day this week',
+      participants: 156,
+      daysLeft: 3,
+      progress: 75,
+      icon: <Target size={20} color="#6366f1" />,
+      color: '#6366f1'
+    },
+    {
+      id: '2',
+      title: 'Weekend Warriors',
+      description: 'Complete 15,000 steps on weekends',
+      participants: 89,
+      daysLeft: 2,
+      progress: 60,
+      icon: <Trophy size={20} color="#f59e0b" />,
+      color: '#f59e0b'
+    },
+    {
+      id: '3',
+      title: 'Morning Walkers',
+      description: 'Walk 5,000 steps before 9 AM',
+      participants: 234,
+      daysLeft: 5,
+      progress: 90,
+      icon: <Clock size={20} color="#10b981" />,
+      color: '#10b981'
+    }
+  ];
+
+  const leaderboard: LeaderboardEntry[] = [
+    { id: '1', name: 'Sarah Johnson', steps: 12450, rank: 1, avatar: '👑' },
+    { id: '2', name: 'Mike Chen', steps: 11890, rank: 2, avatar: '🥈' },
+    { id: '3', name: 'Emma Davis', steps: 11230, rank: 3, avatar: '🥉' },
+    { id: '4', name: 'Alex (You)', steps: 10890, rank: 4, avatar: '👤' },
+    { id: '5', name: 'David Wilson', steps: 10240, rank: 5, avatar: '👤' }
+  ];
 
   const showNotification = (type: 'success' | 'warning' | 'info' | 'error', title: string, message: string) => {
     setNotification({
@@ -210,12 +113,119 @@ export default function HomeScreen() {
         showNotification('info', 'Set Goal', 'Goal setting feature coming soon!');
         break;
       case 'learn':
-        showNotification('success', 'Start Learning', 'Learning session started!');
+        showNotification('success', 'Start Walking', 'Step tracking activated!');
         break;
       case 'progress':
         showNotification('info', 'View Progress', 'Redirecting to progress view...');
         break;
     }
+  };
+
+  const ChallengeCard = ({ challenge }: { challenge: Challenge }) => {
+    const scale = useSharedValue(1);
+
+    const animatedStyle = useAnimatedStyle(() => ({
+      transform: [{ scale: scale.value }],
+    }));
+
+    const handlePressIn = () => {
+      scale.value = withSpring(0.98);
+    };
+
+    const handlePressOut = () => {
+      scale.value = withSpring(1);
+    };
+
+    return (
+      <Animated.View style={[styles.challengeCard, animatedStyle]}>
+        <TouchableOpacity
+          style={styles.challengeContent}
+          onPressIn={handlePressIn}
+          onPressOut={handlePressOut}
+          activeOpacity={0.8}
+        >
+          <View style={[styles.challengeIcon, { backgroundColor: `${challenge.color}15` }]}>
+            {challenge.icon}
+          </View>
+          
+          <View style={styles.challengeInfo}>
+            <Text style={styles.challengeTitle}>{challenge.title}</Text>
+            <Text style={styles.challengeDescription}>{challenge.description}</Text>
+            
+            <View style={styles.challengeMeta}>
+              <View style={styles.metaItem}>
+                <Users size={12} color="#64748b" />
+                <Text style={styles.metaText}>{challenge.participants} participants</Text>
+              </View>
+              <View style={styles.metaItem}>
+                <Calendar size={12} color="#64748b" />
+                <Text style={styles.metaText}>{challenge.daysLeft} days left</Text>
+              </View>
+            </View>
+          </View>
+          
+          <View style={styles.challengeProgress}>
+            <Text style={styles.progressText}>{challenge.progress}%</Text>
+            <View style={styles.progressBar}>
+              <View 
+                style={[
+                  styles.progressFill, 
+                  { width: `${challenge.progress}%`, backgroundColor: challenge.color }
+                ]} 
+              />
+            </View>
+          </View>
+        </TouchableOpacity>
+      </Animated.View>
+    );
+  };
+
+  const LeaderboardItem = ({ entry, index }: { entry: LeaderboardEntry; index: number }) => {
+    const scale = useSharedValue(1);
+
+    const animatedStyle = useAnimatedStyle(() => ({
+      transform: [{ scale: scale.value }],
+    }));
+
+    const handlePressIn = () => {
+      scale.value = withSpring(0.95);
+    };
+
+    const handlePressOut = () => {
+      scale.value = withSpring(1);
+    };
+
+    return (
+      <Animated.View style={[styles.leaderboardItem, animatedStyle]}>
+        <TouchableOpacity
+          style={styles.leaderboardContent}
+          onPressIn={handlePressIn}
+          onPressOut={handlePressOut}
+          activeOpacity={0.8}
+        >
+          <View style={styles.rankContainer}>
+            <Text style={styles.rankText}>{entry.rank}</Text>
+            <Text style={styles.avatarText}>{entry.avatar}</Text>
+          </View>
+          
+          <View style={styles.leaderboardInfo}>
+            <Text style={[
+              styles.leaderboardName,
+              entry.name.includes('(You)') && styles.yourName
+            ]}>
+              {entry.name}
+            </Text>
+            <Text style={styles.leaderboardSteps}>{entry.steps.toLocaleString()} steps</Text>
+          </View>
+          
+          {entry.rank <= 3 && (
+            <View style={[styles.medal, { backgroundColor: entry.rank === 1 ? '#fbbf24' : entry.rank === 2 ? '#9ca3af' : '#cd7f32' }]}>
+              <Trophy size={16} color="#ffffff" />
+            </View>
+          )}
+        </TouchableOpacity>
+      </Animated.View>
+    );
   };
 
   return (
@@ -235,41 +245,83 @@ export default function HomeScreen() {
         <View style={styles.welcomeSection}>
           <View style={styles.welcomeHeader}>
             <Text style={styles.greeting}>{user.greeting}, {user.name}! 👋</Text>
-            <Text style={styles.welcomeSubtitle}>Ready to achieve your goals today?</Text>
-          </View>
-          
-          <View style={styles.quickActionsGrid}>
-            {quickActions.map((action) => (
-              <QuickActionCard key={action.id} action={action} />
-            ))}
+            <Text style={styles.welcomeSubtitle}>Ready to walk your way to better health?</Text>
           </View>
         </View>
 
-        {/* Progress Section */}
+        {/* Step Tracker */}
+        <StepTracker />
+
+        {/* Active Challenges */}
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
-            <Text style={styles.sectionTitle}>Your Progress</Text>
+            <Text style={styles.sectionTitle}>Active Challenges</Text>
             <TouchableOpacity style={styles.viewAllButton}>
               <Text style={styles.viewAllText}>View All</Text>
               <ChevronRight size={16} color="#6366f1" />
             </TouchableOpacity>
           </View>
           
-          <View style={styles.progressGrid}>
-            {progressCards.map((card) => (
-              <ProgressCardComponent key={card.id} card={card} />
+          <View style={styles.challengesList}>
+            {challenges.map((challenge) => (
+              <ChallengeCard key={challenge.id} challenge={challenge} />
             ))}
           </View>
         </View>
 
-        {/* Loading Animations Section */}
+        {/* Leaderboard */}
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
-            <Text style={styles.sectionTitle}>Loading Animations</Text>
-            <Text style={styles.sectionSubtitle}>Beautiful loading states for your app</Text>
+            <Text style={styles.sectionTitle}>Today's Leaderboard</Text>
+            <TouchableOpacity style={styles.viewAllButton}>
+              <Text style={styles.viewAllText}>View All</Text>
+              <ChevronRight size={16} color="#6366f1" />
+            </TouchableOpacity>
           </View>
           
-          <LoadingDemo />
+          <View style={styles.leaderboardContainer}>
+            {leaderboard.map((entry, index) => (
+              <LeaderboardItem key={entry.id} entry={entry} index={index} />
+            ))}
+          </View>
+        </View>
+
+        {/* Quick Stats */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>This Week</Text>
+          <View style={styles.statsGrid}>
+            <View style={styles.statCard}>
+              <View style={styles.statIcon}>
+                <TrendingUp size={20} color="#10b981" />
+              </View>
+              <Text style={styles.statValue}>68,450</Text>
+              <Text style={styles.statLabel}>Total Steps</Text>
+            </View>
+            
+            <View style={styles.statCard}>
+              <View style={styles.statIcon}>
+                <MapPin size={20} color="#f59e0b" />
+              </View>
+              <Text style={styles.statValue}>54.8 km</Text>
+              <Text style={styles.statLabel}>Distance</Text>
+            </View>
+            
+            <View style={styles.statCard}>
+              <View style={styles.statIcon}>
+                <Star size={20} color="#ef4444" />
+              </View>
+              <Text style={styles.statValue}>2,738</Text>
+              <Text style={styles.statLabel}>Calories</Text>
+            </View>
+            
+            <View style={styles.statCard}>
+              <View style={styles.statIcon}>
+                <Award size={20} color="#8b5cf6" />
+              </View>
+              <Text style={styles.statValue}>5</Text>
+              <Text style={styles.statLabel}>Challenges</Text>
+            </View>
+          </View>
         </View>
       </ScrollView>
 
@@ -279,7 +331,7 @@ export default function HomeScreen() {
       />
     </SafeAreaView>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -291,10 +343,10 @@ const styles = StyleSheet.create({
   },
   welcomeSection: {
     padding: 20,
-    paddingBottom: 24,
+    paddingBottom: 16,
   },
   welcomeHeader: {
-    marginBottom: 24,
+    marginBottom: 16,
   },
   greeting: {
     fontSize: 28,
@@ -307,63 +359,24 @@ const styles = StyleSheet.create({
     color: '#64748b',
     lineHeight: 24,
   },
-  quickActionsGrid: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    gap: 12,
-  },
-  quickActionCard: {
-    flex: 1,
-  },
-  quickActionContent: {
-    padding: 20,
-    borderRadius: 16,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 4,
-  },
-  quickActionIcon: {
-    marginBottom: 12,
-  },
-  quickActionTitle: {
-    fontSize: 14,
-    fontWeight: '700',
-    color: '#ffffff',
-    marginBottom: 4,
-    textAlign: 'center',
-  },
-  quickActionSubtitle: {
-    fontSize: 12,
-    color: '#ffffff',
-    opacity: 0.9,
-    textAlign: 'center',
-  },
   section: {
     paddingHorizontal: 20,
     marginBottom: 24,
   },
   sectionHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     marginBottom: 16,
   },
   sectionTitle: {
     fontSize: 20,
     fontWeight: '800',
     color: '#1e293b',
-    marginBottom: 4,
-  },
-  sectionSubtitle: {
-    fontSize: 14,
-    color: '#64748b',
-    lineHeight: 20,
   },
   viewAllButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    alignSelf: 'flex-end',
-    marginTop: 8,
   },
   viewAllText: {
     fontSize: 14,
@@ -371,60 +384,174 @@ const styles = StyleSheet.create({
     color: '#6366f1',
     marginRight: 4,
   },
-  progressGrid: {
+  challengesList: {
     gap: 12,
   },
-  progressCard: {
+  challengeCard: {
     backgroundColor: '#ffffff',
     borderRadius: 16,
-    padding: 20,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.05,
     shadowRadius: 8,
     elevation: 2,
   },
-  progressContent: {
-    gap: 12,
-  },
-  progressHeader: {
+  challengeContent: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
+    padding: 16,
   },
-  progressIcon: {
-    width: 40,
-    height: 40,
-    borderRadius: 10,
+  challengeIcon: {
+    width: 48,
+    height: 48,
+    borderRadius: 12,
     justifyContent: 'center',
     alignItems: 'center',
+    marginRight: 16,
   },
-  progressValue: {
-    fontSize: 24,
-    fontWeight: '800',
-    color: '#1e293b',
+  challengeInfo: {
+    flex: 1,
   },
-  progressTitle: {
+  challengeTitle: {
     fontSize: 16,
     fontWeight: '700',
     color: '#1e293b',
+    marginBottom: 4,
   },
-  progressSubtitle: {
+  challengeDescription: {
     fontSize: 14,
     color: '#64748b',
     lineHeight: 20,
+    marginBottom: 8,
+  },
+  challengeMeta: {
+    flexDirection: 'row',
+    gap: 16,
+  },
+  metaItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+  },
+  metaText: {
+    fontSize: 12,
+    color: '#64748b',
+  },
+  challengeProgress: {
+    alignItems: 'center',
+  },
+  progressText: {
+    fontSize: 14,
+    fontWeight: '700',
+    color: '#1e293b',
+    marginBottom: 4,
   },
   progressBar: {
-    marginTop: 4,
-  },
-  progressTrack: {
-    height: 6,
+    width: 60,
+    height: 4,
     backgroundColor: '#e2e8f0',
-    borderRadius: 3,
+    borderRadius: 2,
     overflow: 'hidden',
   },
   progressFill: {
     height: '100%',
-    borderRadius: 3,
+    borderRadius: 2,
+  },
+  leaderboardContainer: {
+    backgroundColor: '#ffffff',
+    borderRadius: 16,
+    overflow: 'hidden',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 8,
+    elevation: 2,
+  },
+  leaderboardItem: {
+    borderBottomWidth: 1,
+    borderBottomColor: '#f1f5f9',
+  },
+  leaderboardContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 16,
+  },
+  rankContainer: {
+    alignItems: 'center',
+    marginRight: 16,
+    minWidth: 40,
+  },
+  rankText: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: '#1e293b',
+    marginBottom: 4,
+  },
+  avatarText: {
+    fontSize: 20,
+  },
+  leaderboardInfo: {
+    flex: 1,
+  },
+  leaderboardName: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#1e293b',
+    marginBottom: 4,
+  },
+  yourName: {
+    color: '#6366f1',
+    fontWeight: '700',
+  },
+  leaderboardSteps: {
+    fontSize: 14,
+    color: '#64748b',
+  },
+  medal: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  statsGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+  },
+  statCard: {
+    width: '48%',
+    backgroundColor: '#ffffff',
+    borderRadius: 16,
+    padding: 16,
+    marginBottom: 12,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 8,
+    elevation: 2,
+  },
+  statIcon: {
+    width: 40,
+    height: 40,
+    borderRadius: 10,
+    backgroundColor: '#f8fafc',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  statValue: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: '#1e293b',
+    marginBottom: 4,
+  },
+  statLabel: {
+    fontSize: 12,
+    color: '#64748b',
+    textAlign: 'center',
   },
 });
+
+export default WalkingChallengeApp;

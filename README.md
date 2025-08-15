@@ -1,43 +1,59 @@
-# Bolt Expo Starter - Enhanced App
+# Walking Challenge App
 
-A comprehensive React Native Expo app with beautiful UI components, smooth animations, and modern design patterns.
+A comprehensive React Native Expo app for tracking steps, joining walking challenges, and building healthy communities. Connect with fitness devices, compete with friends, and stay motivated to achieve your daily walking goals.
 
-## ✨ Features
+## 🚶‍♂️ Features
 
-### 🏠 Enhanced Home Screen
-- **Welcome Section**: Personalized greeting with user name
-- **Quick Actions**: Interactive cards for common tasks (Start Learning, Set Goal, View Progress)
-- **Progress Dashboard**: Visual progress cards with animated progress bars
-- **Loading Animations**: Beautiful loading states and animations
-- **Floating Action Button**: Expandable FAB with quick actions
-- **Notification System**: Toast notifications for user feedback
+### 📱 Step Tracking & Health Integration
+- **Real-time Step Counting**: Connect with Apple Health, Google Fit, and fitness devices
+- **Automatic Data Sync**: Seamless integration with iWatch, Fitbit, and other fitness apps
+- **Health Permissions**: Secure access to health data for accurate step tracking
+- **Manual Entry Prevention**: Steps cannot be manually entered to ensure authenticity
+- **Daily Goals**: Set and track personalized daily step targets
+- **Progress Visualization**: Beautiful charts and progress bars
 
-### 📊 Activity Feed
-- **Filterable Activities**: Filter by achievements, goals, milestones, and reminders
-- **Interactive Cards**: Animated activity cards with like/comment interactions
-- **Timeline View**: Chronological display of user activities
-- **Rich Content**: Icons, timestamps, and engagement metrics
+### 👤 User Registration & Authentication
+- **Individual Registration**: Complete user profiles with personal information
+  - Name, email, phone number
+  - Date of birth and gender
+  - Company/organization selection
+  - Secure password creation
+- **Company Registration**: Organizations can register for community challenges
+  - University, school, gated community, office support
+  - Complete address and contact information
+  - Admin approval system
+- **Admin Login**: Special access for challenge creators and administrators
+- **Multi-type Authentication**: Individual, company, and admin login options
 
-### 👤 Comprehensive Profile
-- **User Avatar**: Profile picture with edit functionality
-- **Level System**: Experience points and level progression
-- **Statistics Grid**: Key metrics (Days Active, Points Earned, Goals Completed, Study Hours)
-- **Achievements**: Unlockable achievements with progress tracking
-- **Quick Actions**: Settings, Share Profile, Support options
+### 🏆 Walking Challenges
+- **Daily Challenges**: 10K steps, morning walks, weekend warriors
+- **Weekly Challenges**: Extended goals with weekly targets
+- **Monthly Challenges**: Long-term commitments like monthly marathons
+- **Community Challenges**: Collaborative goals across organizations
+- **Progress Tracking**: Real-time progress monitoring with visual indicators
+- **Rewards System**: Badges, trophies, and achievements for motivation
+- **Leaderboards**: Competitive rankings within communities
 
-### ⚙️ Advanced Settings
-- **Organized Sections**: Notifications, Appearance, Privacy & Security, Data & Storage, Support, Account
-- **Interactive Toggles**: Switch components for boolean settings
-- **Navigation Items**: Settings that lead to sub-screens
-- **Action Items**: Destructive actions with confirmation dialogs
-- **Modern Design**: Clean, organized interface with proper spacing
+### 👥 Community Features
+- **Community Overview**: Total members, steps, and challenge statistics
+- **Member Profiles**: Detailed user profiles with achievements and levels
+- **Company Groups**: Filter members by organization
+- **Social Interactions**: Like, message, and share achievements
+- **Online Status**: Real-time online indicators
+- **Ranking System**: Competitive leaderboards with medals
 
-### 🎨 Design System
-- **Consistent Colors**: Primary (#6366f1), Success (#10b981), Warning (#f59e0b), Error (#ef4444)
-- **Typography**: Hierarchical text styles with proper weights and sizes
-- **Shadows & Elevation**: Subtle shadows for depth and visual hierarchy
-- **Border Radius**: Consistent rounded corners throughout the app
-- **Animations**: Smooth spring animations for interactions
+### ⚙️ Admin Panel
+- **Challenge Management**: Create and manage walking challenges
+- **Company Approval**: Review and approve company registrations
+- **Community Oversight**: Monitor community statistics and engagement
+- **User Management**: Administer user accounts and permissions
+
+### 🎨 Design & UX
+- **Modern Interface**: Clean, intuitive design with smooth animations
+- **Responsive Design**: Optimized for all screen sizes
+- **Dark Mode Support**: Comfortable viewing in any lighting
+- **Accessibility**: Inclusive design for all users
+- **Smooth Animations**: React Native Reanimated for 60fps animations
 
 ## 🚀 Getting Started
 
@@ -46,13 +62,14 @@ A comprehensive React Native Expo app with beautiful UI components, smooth anima
 - npm or yarn
 - Expo CLI
 - iOS Simulator or Android Emulator (optional)
+- Physical device for health data testing
 
 ### Installation
 
 1. **Clone the repository**
    ```bash
    git clone <repository-url>
-   cd bolt-expo-starter
+   cd walking-challenge-app
    ```
 
 2. **Install dependencies**
@@ -74,50 +91,66 @@ A comprehensive React Native Expo app with beautiful UI components, smooth anima
    - Press 'i' for iOS Simulator
    - Press 'a' for Android Emulator
 
+### Health Data Setup
+
+#### iOS
+- Enable Health app permissions in Settings
+- Grant step counting and distance tracking access
+- Connect with Apple Watch for enhanced accuracy
+
+#### Android
+- Enable Google Fit integration
+- Grant activity recognition permissions
+- Connect with fitness devices via Google Fit
+
 ## 📱 App Structure
 
 ```
 app/
 ├── _layout.tsx              # Root layout with navigation
+├── login.tsx                # Multi-type login screen
+├── signup-individual.tsx    # Individual user registration
+├── signup-company.tsx       # Company registration
 ├── (tabs)/
 │   ├── _layout.tsx          # Tab navigation layout
-│   ├── index.tsx            # Enhanced home screen
-│   ├── activity.tsx         # Activity feed with filters
-│   ├── profile.tsx          # User profile with stats
-│   └── settings.tsx         # Comprehensive settings
+│   ├── index.tsx            # Home screen with step tracking
+│   ├── challenges.tsx       # Walking challenges
+│   ├── community.tsx        # Community features
+│   └── settings.tsx         # App settings
 components/
-├── LoadingDemo.tsx          # Loading animations showcase
-├── NotificationBanner.tsx   # Toast notification component
-└── FloatingActionButton.tsx # Expandable FAB component
+├── StepTracker.tsx          # Step tracking component
+├── NotificationBanner.tsx   # Toast notifications
+└── FloatingActionButton.tsx # Quick actions FAB
 ```
 
 ## 🎯 Key Components
 
-### NotificationBanner
-- **Types**: Success, Warning, Error, Info
-- **Auto-hide**: Configurable duration
-- **Animations**: Smooth slide-in/out with spring animations
-- **Customizable**: Colors, icons, and styling
+### StepTracker
+- **Health Integration**: Connects with device health data
+- **Real-time Updates**: Live step counting and progress
+- **Goal Tracking**: Daily step targets with progress visualization
+- **Statistics**: Distance, calories, active time calculations
+- **Animations**: Smooth progress bars and loading states
 
-### FloatingActionButton
-- **Expandable**: Shows/hides quick action buttons
-- **Smooth Animations**: Spring-based transitions
-- **Quick Actions**: Goal setting, learning, progress viewing
-- **Accessible**: Proper touch targets and feedback
+### Authentication System
+- **Multi-type Login**: Individual, company, and admin options
+- **Form Validation**: Comprehensive input validation
+- **Secure Storage**: Encrypted credential storage
+- **Password Security**: Strong password requirements
 
-### Activity Cards
-- **Interactive**: Press animations and feedback
-- **Rich Content**: Icons, timestamps, engagement metrics
-- **Filterable**: Multiple activity types
-- **Responsive**: Adapts to content length
+### Challenge Management
+- **Challenge Types**: Daily, weekly, monthly, and special challenges
+- **Progress Tracking**: Real-time progress monitoring
+- **Reward System**: Badges and achievements
+- **Status Management**: Active, completed, and upcoming challenges
 
-### Progress Cards
-- **Visual Progress**: Animated progress bars
-- **Key Metrics**: Important user statistics
-- **Color-coded**: Different colors for different metrics
-- **Interactive**: Press feedback and animations
+### Community Features
+- **Member Profiles**: Detailed user information and stats
+- **Social Interactions**: Like, message, and share functionality
+- **Filtering**: Filter by company, friends, or leaders
+- **Online Status**: Real-time presence indicators
 
-## 🎨 Design Principles
+## 🎨 Design System
 
 ### Color Palette
 - **Primary**: #6366f1 (Indigo)
@@ -142,26 +175,6 @@ components/
 - **Scale**: Subtle scale effects for press feedback
 - **Opacity**: Fade in/out for smooth transitions
 
-## 🔧 Customization
-
-### Adding New Features
-1. Create new components in the `components/` directory
-2. Add new screens in `app/(tabs)/` or create new route groups
-3. Update navigation in `app/(tabs)/_layout.tsx`
-4. Follow the established design patterns
-
-### Styling
-- Use the existing color palette and typography
-- Follow the spacing guidelines
-- Implement consistent border radius (12px, 16px)
-- Add appropriate shadows for depth
-
-### Animations
-- Use `react-native-reanimated` for smooth animations
-- Implement spring animations for natural feel
-- Add press feedback for interactive elements
-- Use consistent animation durations
-
 ## 📦 Dependencies
 
 ### Core
@@ -169,31 +182,65 @@ components/
 - **React Native**: 0.79.1
 - **React**: 19.0.0
 
-### Navigation
+### Health & Sensors
+- **Expo Health**: ~1.0.0
+- **Expo Sensors**: ~14.1.3
+- **Expo Location**: ~18.1.2
+- **Expo Device**: ~7.1.2
+
+### Navigation & UI
 - **Expo Router**: ~5.0.2
 - **React Navigation**: ^7.0.14
-
-### UI & Animations
 - **React Native Reanimated**: ~3.17.4
 - **Lucide React Native**: ^0.475.0
-- **Expo Linear Gradient**: ~14.1.3
 
-### Icons & Graphics
-- **Expo Vector Icons**: ^14.1.0
-- **React Native SVG**: 15.11.2
+### Storage & Security
+- **Expo Secure Store**: ~14.1.3
+- **Expo SQLite**: ~14.1.3
+- **Async Storage**: 1.23.1
+
+## 🔧 Configuration
+
+### Health Permissions
+The app requires specific permissions for health data access:
+
+#### iOS (Info.plist)
+```xml
+<key>NSHealthShareUsageDescription</key>
+<string>This app needs access to health data to track your steps and walking progress.</string>
+<key>NSHealthUpdateUsageDescription</key>
+<string>This app needs permission to update health data for step tracking.</string>
+```
+
+#### Android (AndroidManifest.xml)
+```xml
+<uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
+<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+```
 
 ## 🚀 Performance
 
 - **Optimized Animations**: Using Reanimated 3 for 60fps animations
-- **Efficient Rendering**: Proper use of React.memo and useCallback
+- **Efficient Health Data**: Minimal battery impact from health monitoring
 - **Lazy Loading**: Components loaded only when needed
 - **Memory Management**: Proper cleanup of animations and timers
+- **Background Sync**: Efficient data synchronization
 
 ## 📱 Platform Support
 
-- **iOS**: Full support with native animations
-- **Android**: Full support with Material Design principles
+- **iOS**: Full support with HealthKit integration
+- **Android**: Full support with Google Fit integration
 - **Web**: Responsive design with web-optimized interactions
+- **Fitness Devices**: Apple Watch, Fitbit, Garmin, and more
+
+## 🔒 Security & Privacy
+
+- **Health Data**: Secure access to device health information
+- **User Privacy**: No manual step entry to prevent cheating
+- **Data Encryption**: Secure storage of user credentials
+- **Permission Management**: Granular control over data access
+- **GDPR Compliance**: User data protection and control
 
 ## 🤝 Contributing
 
@@ -202,12 +249,23 @@ components/
 3. Follow the existing code style and patterns
 4. Add appropriate animations and interactions
 5. Test on both iOS and Android
-6. Submit a pull request
+6. Ensure health data integration works correctly
+7. Submit a pull request
 
 ## 📄 License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
 
+## 🆘 Support
+
+For support and questions:
+- Check the documentation
+- Review health permission settings
+- Ensure device compatibility
+- Test with physical devices for health data
+
 ---
 
 **Built with ❤️ using Expo and React Native**
+
+*Step into a healthier future with Walking Challenge App! 🚶‍♂️✨*
